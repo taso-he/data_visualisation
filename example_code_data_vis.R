@@ -1,6 +1,7 @@
 # Data visualisation example code ----------------------------------------------
 
-# Written by Luke Arundel, November 2023 
+# Written by Luke Arundel, November 2023
+# Updated by Mikayla Boginsky, November 2025
 
 # Example code that can be used to create engaging charts in R
 # Theme can be adjusted according to individual brand guidelines
@@ -13,9 +14,6 @@
 # Fonts need to be loaded in
 
 # Loading libraries and data ---------------------------------------------------
-
-#setwd("C:/Users/lukearundel/Documents/Data visualisation")
-# Uncomment above and set WD as appropriate
 
 # Load libraries (install if needed)
 
@@ -35,7 +33,8 @@ df <- read.csv("example_data_vis.csv")
 # font_import() # Uncomment if not run before
 # Importing fonts takes a few minutes, but only needs to be run once
 loadfonts(device = "win") # May need to be changed on Apple devices
-fonts()
+fonts() #Check that fonts are loaded on your device. For TASO, the 
+#required fonts are Neuton for titles and Barlow for all other text. 
 
 # Loading in a logo / images 
 
@@ -54,34 +53,57 @@ example_chart <- ggplot(df, aes(x = count, y = factor(category, levels = c("No",
   theme_minimal() + # Setting the theme elements as minimal, adding elements we want back in 
   # Title, subtitle, axis titles and caption 
   labs(
-    title = "Over 40 providers did not include a Theory of Change (ToC)\nin their Access and Participation Plan (APP)",
-    subtitle = "Figure 3: The number of Higher Education Providers (HEPs) who included a ToC\nin their APP",
+    title = "Over 40 providers did not include a Theory of Change (ToC) in their Access and\nParticipation Plan (APP)",
+    subtitle = "Figure 3: The number of Higher Education Providers (HEPs) who included a ToC in their APP",
     caption = "Source: TASO (2023), Approaches to addressing the ethnicity degree awarding gap",
     x = NULL, # Not showing X or Y axis title for this example chart
     y = NULL 
   ) +
   # Theme elements
-  theme(text = element_text(family = "Arial"), # Specifying font for chart
-  ## Title and subtitle elements 
-  plot.title.position = "plot", # Aligning title to entire plot (not just panel)
-  plot.title = element_text(size = 16, face = "bold"), 
-  plot.subtitle = element_text(size = 12), 
-  ## Caption elements 
-  plot.caption.position = "plot", # Aligning caption to entire plot
-  plot.caption = element_text(hjust = 0, # Aligning caption to the left
-                              size = 10, # Changing size
-                              face = "italic"), # Italicising
-  ## Gridlines 
-  panel.grid.major.x = element_line(colour = "#E4E2D9"), # Including x major gridlines and setting their colour
-  ## Other theme elements
-  plot.background = element_rect(fill = "#EDEBE3"), # Changing background colour
-  plot.margin = margin(0.25, 0.25, 0.25, 0.25, "in"), # Setting margin in inches
-  axis.text.y = element_text(size = 11), # Setting x and y axis text size
-  axis.text.x = element_text(size = 11)
-  ) + 
-  # Other helpful elements
+  theme(
+    theme(
+      # Set the default text style for the plot
+      text = element_text(family = "Barlow", size = 12),
+      
+      # Set the title, subtitle, and caption position and style
+      plot.title.position = "plot",  # Align title with the whole plot, not just panel
+      plot.title = element_text(family = "Neuton", size = 16), #Different title font 
+      plot.subtitle = element_text(size = 12),
+      plot.caption.position = "plot",
+      plot.caption = element_text(hjust = 0, size = 9, face = "italic"),
+      
+      # Background color of the entire plot
+      plot.background = element_rect(fill = "#EDEBE3", color = NA),
+      
+      # Plot margins (top, right, bottom, left)
+      plot.margin = margin(0.25, 0.25, 0.4, 0.25, "in"), # Leave extra room at bottom for logo
+      
+      # Panel border and grid lines
+      panel.border = ggplot2::element_blank(),
+      panel.grid.major = element_line(colour = "#CECABC", linewidth = 0.3), 
+      panel.grid.minor = element_blank(),
+      
+      # Background color of the plotting panel
+      panel.background = ggplot2::element_rect(fill = "#edebe3", color = NA), 
+      
+      # Axis text and title styling
+      axis.text = element_text(size = 10),
+      axis.title = element_text(size = 9, face = "italic"),
+      
+      # Axis lines and ticks
+      axis.line.y = element_blank(),  # Remove Y-axis line
+      axis.line = element_line(colour = "#485866", linewidth = 0.5), # Default axis line style
+      axis.text.x = element_text(margin = margin(t = 7, unit = "pt")), # Add space above X-axis labels
+      axis.ticks.length = unit(0.3, "cm"), # Increase tick length
+      axis.ticks.x = element_line(colour = "#485866", linewidth = 0.5), # Style X-axis ticks
+      
+      # Remove legend
+      legend.position = "none"
+    )
+    
+  )+ 
   coord_cartesian(clip = "off") + # Helpful for positioning things outside of the plot
-  annotation_custom(logo, ymin = -6.2, xmin = 32, xmax = 42) 
+  annotation_custom(logo, ymin = -6.8, xmin = 32, xmax = 42) 
   # Adding logo with annotation_custom can be fiddly. You may need to play around
   # with x and y min/max to size and place your image as you want
 
@@ -102,44 +124,48 @@ extra_chart <- ggplot(df, aes(x = count, y = factor(category, levels = c("No",
   theme_minimal() + 
   # Title, subtitle, axis titles and caption 
   labs(
-    title = 'Over 40 providers <span style="color:#3b66bc;">did not include a Theory of Change</span> (ToC)  \nin their Access and Participation Plan (APP)',
+    title = 'Over 40 providers <span style="color:#3b66bc;">did not include a Theory of Change (ToC)</span> in their Access and<br> Participation Plan (APP)',
     # By using ggtext::element_markdown, we can use markdown stylings to colour specific words in the chart to highlight a point
-    subtitle = "Figure 3: The number of Higher Education Providers (HEPs) who included a ToC\nin their APP",
+    subtitle = "Figure 3: The number of Higher Education Providers (HEPs) who included a ToC in their APP",
     caption = "Source: TASO (2023), Approaches to addressing the ethnicity degree awarding gap",
     x = NULL, 
     y = NULL 
   ) +
   # Theme elements
-  theme(text = element_text(family = "Arial"), 
-        ## Title and subtitle elements 
-        plot.title.position = "plot", 
-        plot.title = ggtext::element_markdown(face = "bold", 
-        # ^ Using ggtext::element_markdown so we can use markdown stylings to colour specific words
-                                              size = 16), 
-        plot.subtitle = element_text(size = 12), 
-        ## Caption elements 
-        plot.caption.position = "plot", 
-        plot.caption = element_text(hjust = 0, 
-                                    size = 10, 
-                                    face = "italic"),
-        ## Other theme elements
-        plot.background = element_rect(fill = "#EDEBE3"), 
-        plot.margin = margin(0.25, 0.25, 0.25, 0.25, "in"), 
-        axis.text.x = element_blank(), # Removing x axis text as we are labelling bars directly 
-        axis.text.y = element_text(size = 11),
+  theme(
+    text = element_text(family = "Barlow", size = 12),
+    plot.title.position = "plot",
+    plot.title = ggtext::element_markdown(family = "Neuton", size = 16), 
+    # ^ Using ggtext::element_markdown so we can use markdown stylings to colour specific words
+    plot.subtitle = element_text(size = 12),
+    plot.caption.position = "plot",
+    plot.caption = element_text(hjust = 0, size = 9, face = "italic"),
+    plot.background = element_rect(fill = "#EDEBE3", color = NA),
+    plot.margin = margin(0.25, 0.25, 0.4, 0.25, "in"), #adjust bottom margin to leave room for logo
+    panel.border = ggplot2::element_blank(),
+    panel.grid.major = element_line(colour = "#CECABC", linewidth = 0.3), 
+    panel.grid.minor = element_blank(),
+    panel.background = ggplot2::element_rect(fill = "#edebe3", color = NA), 
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 9, face = "italic"),
+    axis.line.y = element_blank(),
+    axis.line = element_line(colour = "#485866", linewidth = 0.5),
+    axis.text.x = element_text(margin = margin(t = 7, unit = "pt")), 
+    axis.ticks.length = unit(0.3, "cm"), # Increase the length of ticks
+    axis.ticks.x = element_line(colour = "#485866", linewidth = 0.5), 
+    legend.position = "none"
   ) + 
-  # Other helpful elements
   coord_cartesian(clip = "off") + 
-  annotation_custom(logo, ymin = -5.5, xmin = 32, xmax = 42) 
+  annotation_custom(logo, ymin = -6.8, xmin = 32, xmax = 42) 
 
 # Highlighting "No" 
 extra_chart <- extra_chart + 
   geom_bar(data = subset(df, category == "No"), fill = "#3b66bc", stat = "identity", show.legend = FALSE) +
   # Highlighting "No" by colouring it solid blue
-  geom_text(aes(label = count, colour = category), vjust = 0.5, hjust = 1.5, size = 4, fontface = "bold", 
+  geom_text(aes(label = count, colour = category), vjust = 0.5, hjust = 1.5, size = 4, family = "Barlow", fontface = "bold", 
             data = subset(df, category == "No"), color = "white") +
   # Adding data labels on the bars 
-  geom_text(aes(label = count, colour = category), vjust = 0.5, hjust = 1.5, size = 4, 
+  geom_text(aes(label = count, colour = category), vjust = 0.5, hjust = 1.5, size = 4,family = "Barlow", 
             data = subset(df, category != "No"), color = "black") 
 
 ggsave("extra_chart.png", extra_chart, width = 180, height = 120, units = "mm")

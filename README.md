@@ -14,4 +14,4 @@ The code in this repository is written in R. It is designed to be easy to use an
 
 If you would like to contribute, please fork this repository and create a pull request.
 
-Alternatively, please contact luke.arundel@taso.org.uk if there is anything you would like to discuss.
+Alternatively, please contact research@taso.org.uk if there is anything you would like to discuss.
